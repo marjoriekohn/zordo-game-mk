@@ -1,6 +1,7 @@
 apply plugin: "java"
 
 sourceCompatibility = 1.6
+jar.baseName = "The Legend of Zordo"
 sourceSets.main.java.srcDirs = [ "src/" ]
 
 project.ext.mainClassName = "com.zordo.game.desktop.DesktopLauncher"
