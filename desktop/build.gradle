@@ -1,14 +1,13 @@
 apply plugin: "java"
 
-sourceCompatibility = 1.7
-jar.baseName = "The Legend of Zordo"
+jar.archiveBaseName = "The Legend of Zordo"
 sourceSets.main.java.srcDirs = [ "src/" ]
 
 project.ext.mainClassName = "com.zordo.game.desktop.DesktopLauncher"
 project.ext.assetsDir = new File("../core/assets");
 
 task run(dependsOn: classes, type: JavaExec) {
-    main = project.mainClassName
+    mainClass = project.mainClassName
     classpath = sourceSets.main.runtimeClasspath
     standardInput = System.in
     workingDir = project.assetsDir
@@ -16,7 +15,7 @@ task run(dependsOn: classes, type: JavaExec) {
 }
 
 task debug(dependsOn: classes, type: JavaExec) {
-    main = project.mainClassName
+    mainClass = project.mainClassName
     classpath = sourceSets.main.runtimeClasspath
     standardInput = System.in
     workingDir = project.assetsDir
