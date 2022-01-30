@@ -6,6 +6,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
@@ -18,6 +19,8 @@ public class PlayScreen implements Screen{
 	private Texture playerTexture;
 	private SpriteBatch batch;
 	
+	OrthographicCamera camera;
+	
 	final LegendOfZordo game;
 
 	public PlayScreen(final LegendOfZordo game) {
@@ -27,6 +30,9 @@ public class PlayScreen implements Screen{
 		player.y = 10;
 		
 		playerTexture = new Texture("badlogic.jpg");
+		
+		camera = new OrthographicCamera();
+		camera.setToOrtho(false, 800,400);
 		
 	}
 	
@@ -42,6 +48,7 @@ public class PlayScreen implements Screen{
 		ScreenUtils.clear(Color.BLACK);
 		
 		batch = new SpriteBatch();
+		batch.setProjectionMatrix(camera.combined);
 		
 		batch.begin();
 		batch.draw(playerTexture, player.x,player.y);
@@ -56,9 +63,7 @@ public class PlayScreen implements Screen{
 		} else if(Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
 			player.y -= 500 * Gdx.graphics.getDeltaTime();
 		}
-		
-		
-
+		camera.update();
 	}
 
 	@Override
