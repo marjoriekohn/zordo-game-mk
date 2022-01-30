@@ -47,7 +47,7 @@ public class TitleScreen implements Screen {
         batch.end();
         
         if(Gdx.input.isKeyPressed(Input.Keys.ENTER)) {
-        	this.game.setScreen(new PlayScreen());
+        	this.game.setScreen(new PlayScreen(game));
         }
 	}
 
