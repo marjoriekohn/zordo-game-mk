@@ -1,18 +1,30 @@
 package com.zordo.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.zordo.game.GifDecoder;
+import com.zordo.game.LegendOfZordo;
 
 public class TitleScreen implements Screen {
 
+	final LegendOfZordo game;
     public SpriteBatch batch;
     public Animation<TextureRegion> animation;
     float elapsed;
+    
+    OrthographicCamera camera;
+    
+    public TitleScreen(final LegendOfZordo game) {
+    	this.game = game;
+    	camera = new OrthographicCamera();
+    	camera.setToOrtho(false,800,400);
+    }
 	
 	@Override
 	public void show() {
@@ -23,6 +35,7 @@ public class TitleScreen implements Screen {
 	@Override
 	public void render(float delta) {
 	    batch = new SpriteBatch();
+	    batch.setProjectionMatrix(camera.combined);
 	    animation = GifDecoder.loadGIFAnimation(Animation.PlayMode.LOOP, Gdx.files.internal("lozTitle.gif").read());		
 
 		// TODO Auto-generated method stub
@@ -33,9 +46,9 @@ public class TitleScreen implements Screen {
         batch.draw(animation.getKeyFrame(elapsed), 0, 0);
         batch.end();
         
-//        if(Gdx.input.isKeyJustPressed(Keys.ENTER)){
-//        	System.out.println("Enter pressed: Start Game");
-//        }
+        if(Gdx.input.isKeyPressed(Input.Keys.ENTER)) {
+        	this.game.setScreen(new PlayScreen());
+        }
 	}
 
 	@Override

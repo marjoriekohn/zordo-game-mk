@@ -3,41 +3,28 @@ package com.zordo.screens;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.utils.ScreenUtils;
 
-public class MainScreen implements Screen{
+public class PlayScreen implements Screen{
 
-	private Game game;
-	SpriteBatch batch;
-	float elapsed;
-	
-	public MainScreen() {
+	public PlayScreen() {
 		
-	}
-	
-	public MainScreen(Game game) {
-		this.game = game;
 	}
 	
 	@Override
 	public void show() {
 		// TODO Auto-generated method stub
+		System.out.print("hello, welcome to playscreen");
 		
 	}
 
 	@Override
 	public void render(float delta) {
-		// TODO Auto-generated method stub
-	    batch = new SpriteBatch();
-	  
-		// TODO Auto-generated method stub
-        Gdx.gl.glClearColor(1, 0, 0, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        batch.begin();
-        batch.draw(new Texture(Gdx.files.internal("badlogic.jpg")), 0, 0,800,400);
-        batch.end();
+		ScreenUtils.clear(Color.BLACK);
 
 	}
 
