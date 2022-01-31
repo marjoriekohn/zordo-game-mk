@@ -8,7 +8,10 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.zordo.game.LegendOfZordo;
@@ -16,8 +19,14 @@ import com.zordo.game.LegendOfZordo;
 public class PlayScreen implements Screen{
 	
 	Rectangle player;
-	private Texture playerTexture;
+	private Sprite playerTexture;
 	private SpriteBatch batch;
+	private TextureAtlas atlas;
+	private TextureRegion background;
+	private Texture backgroundTexture;
+	
+	private Boolean flippedLeft;
+	private Boolean flippedRight;
 	
 	OrthographicCamera camera;
 	
@@ -29,7 +38,14 @@ public class PlayScreen implements Screen{
 		player.x = 10;
 		player.y = 10;
 		
-		playerTexture = new Texture("badlogic.jpg");
+		flippedLeft = false;
+		flippedRight = true;
+		
+		atlas = new TextureAtlas("link-sprites.txt");
+		playerTexture = new Sprite(atlas.createSprite("link-standing-0"));
+		background = new TextureRegion();
+		backgroundTexture = new Texture("background_32.png");
+		background.setTexture(backgroundTexture);
 		
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, 800,400);
@@ -51,18 +67,33 @@ public class PlayScreen implements Screen{
 		batch.setProjectionMatrix(camera.combined);
 		
 		batch.begin();
+		batch.draw(backgroundTexture,0,0,800,480);
 		batch.draw(playerTexture, player.x,player.y);
-		batch.end();
+
 		
 		if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+			if(!flippedRight) {
+				playerTexture.flip(true, false);
+				flippedRight = true;
+				flippedLeft = false;
+			}
 			player.x += 500 * Gdx.graphics.getDeltaTime();
 		} else if(Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+			if(!flippedLeft) {
+				playerTexture.flip(true, false);
+				flippedRight = false;
+				flippedLeft = true;
+			}
 			player.x -= 500 * Gdx.graphics.getDeltaTime();
-		} else if(Gdx.input.isKeyPressed(Input.Keys.UP)) {
-			player.y += 500 * Gdx.graphics.getDeltaTime();
-		} else if(Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-			player.y -= 500 * Gdx.graphics.getDeltaTime();
+		} else if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+			player.y += 1000 * Gdx.graphics.getDeltaTime();
 		}
+		
+		if(player.y > 10) {
+			player.y -= 25 * Gdx.graphics.getDeltaTime();
+		}
+
+		batch.end();
 		camera.update();
 	}
 
