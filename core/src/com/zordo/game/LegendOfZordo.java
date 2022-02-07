@@ -14,6 +14,7 @@ public class LegendOfZordo extends Game {
 	
 	@Override
 	public void create () {
+		Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
 		batch = new SpriteBatch();
 		this.setScreen(new TitleScreen(this));
 	}

@@ -3,6 +3,7 @@ package com.zordo.screens;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.zordo.character.Linko;
@@ -56,20 +57,40 @@ public class PlayScreen implements Screen{
 		batch.draw(backgroundTexture,0,0,800,400);
 		
 		linko.move(batch);
-		linko2.move(batch);
 		linko3.move(batch);
 		
-		if(linko.getLinkoCollider().overlaps(linko2.getLinkoCollider())) {
-			linko2.setLinkoCollider(500,10);
-			if(linko.getHealth() > 0) {
-				linko.setHealth(linko.getHealth()-1);
-			}
+		linko.healthRender(batch);
+		
+		if(linko.health <= 0) {
+			BitmapFont font = new BitmapFont();
+			font.draw(batch, "GAME OVER", 400, 200);
 		}
+
+		
 		if(linko.getLinkoCollider().overlaps(linko3.getLinkoCollider())) {
 			linko3.setLinkoCollider(500, 100);
+			linko3.damage();
+			linko.damage();
 		}
 		
-		linko.healthRender(batch);
+		if(linko2 != null) {
+			linko2.move(batch);
+			
+				
+			
+			if(linko.getLinkoCollider().overlaps(linko2.getLinkoCollider())) {
+				linko2.setLinkoCollider(500,10);
+				linko2.damage();
+				linko.damage();
+			}
+	
+			linko2.healthRender(batch, (int) linko2.getLinkoCollider().x - (int)linko2.getLinkoCollider().width + (linko2.hearts.size() *10), (int) linko2.getLinkoCollider().y + (int) linko2.getLinkoCollider().height + 10);
+			
+			if(linko2.hearts.isEmpty()) {
+				linko2 = null;
+				System.gc();
+			}
+		}
 		
 		batch.end();
 		camera.update();
@@ -102,7 +123,6 @@ public class PlayScreen implements Screen{
 	@Override
 	public void dispose() {
 		// TODO Auto-generated method stub
-		
 	}
 
 }

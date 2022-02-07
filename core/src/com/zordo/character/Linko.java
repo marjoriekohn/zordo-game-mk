@@ -1,5 +1,7 @@
 package com.zordo.character;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
@@ -7,17 +9,18 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
+import com.zordo.character.stats.Heart;
 
-public class Linko {	
+public class Linko {
 	Rectangle linkoCollider;
 	Boolean flippedRight;
 	Boolean jumping;
 	Boolean playerControlled;
 	Boolean stepping;
-	
-	int health;
-	Sprite[] hearts;
-		
+
+	public ArrayList<Heart> hearts;
+	public int health;
+
 	Animation<Sprite> runningRightAnimation;
 	Animation<Sprite> runningLeftAnimation;
 	Animation<Sprite> walkingRightAnimation;
@@ -37,31 +40,22 @@ public class Linko {
 	float jump2 = 0;
 	
 	float elapsed;
-	float elapsed2;
 
 	// accessing sprite assets from the directory files
 	String standuri = "link-standing-sprites/";
 	String runuri = "link-running-sprites/";
 	String jumpuri = "link-jumping-sprites/";
-	String heartsuri = "hearts/";
+
 		
 	public Linko(Boolean playerControlled) {
 		this.playerControlled = playerControlled;
 		linkoCollider = new Rectangle();
 		linkoCollider.x = 10;
 		linkoCollider.y = 10;
-		linkoCollider.height = 25;
-		linkoCollider.width = 15;
-		
-		health = 4;
-		hearts = new Sprite[6];
-		
-		
-		// heart textures
-		for(int i = 0; i < 5; i++) {
-			hearts[i] = new Sprite(new Texture(heartsuri + "heart-" + i + ".png"));
-			hearts[i].scale(10);
-		}
+		linkoCollider.height = 45;
+		linkoCollider.width = 20;
+
+		health = 8;
 		
 		// orientation and jumping status
 		flippedRight = true;
@@ -73,6 +67,7 @@ public class Linko {
 		runningLeftFrames = new Sprite[6];
 		walkingRightFrames = new Sprite[4];
 		walkingLeftFrames = new Sprite[4];
+		hearts = new ArrayList<Heart>(8);
 		
 		// standing and jumping sprite creation
 		standRight = new Sprite(new Texture(standuri + "link-standing-0.png"));
@@ -88,13 +83,16 @@ public class Linko {
 			runningRightFrames[i] = new Sprite(new Texture(runuri + "link-running-" + i + ".png"));
 			runningLeftFrames[i] = new Sprite(new Texture(runuri + "link-running-" + i + ".png"));
 			if( i != 2 && i != 5) {
-				System.out.println("adding walk frame: " + j);
 				walkingRightFrames[j] = new Sprite(new Texture(runuri + "link-running-" + i + ".png"));
 				walkingLeftFrames[j] = new Sprite(new Texture(runuri + "link-running-" + i + ".png"));
 				walkingLeftFrames[j].flip(true, false);
 				j++;
 			}
 			runningLeftFrames[i].flip(true, false);
+		}
+		
+		for(int i = 0; i < health; i++) {
+			hearts.add(new Heart());
 		}
 
 		// setting the animations
@@ -138,11 +136,12 @@ public class Linko {
 					this.setFlippedRight(false);
 				}
 				if(!this.getJumping()){
-					animation = this.getRunningLeftAnimation();
+					animation = this.getWalkingLeftAnimation();
 				}
 				if(!Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) {
 					this.getLinkoCollider().x -= 100 * Gdx.graphics.getDeltaTime();
 				} else {
+					animation = this.getRunningLeftAnimation();
 					this.getLinkoCollider().x -= 150 * Gdx.graphics.getDeltaTime();
 				}
 			} 
@@ -155,11 +154,8 @@ public class Linko {
 						this.getLinkoCollider().y += 50;
 					}
 					jump2 = this.getLinkoCollider().y * 1.5f;
-					System.out.println("jump 1: " + this.getLinkoCollider().y);
 				} else {
-					System.out.println("jump 2 start: " + this.getLinkoCollider().y);
 					this.getLinkoCollider().y = jump2;
-					System.out.println("jump 2: " + this.getLinkoCollider().y);
 				}
 				jumps++;
 			} 
@@ -194,23 +190,61 @@ public class Linko {
 		}
 	}
 	
-	public void healthRender(SpriteBatch batch) {
-		switch (this.health) {
-			case 4: batch.draw(hearts[4], 10, 250);
-				break;
-			case 3: batch.draw(hearts[3], 10,250);
-				break;
-			case 2: batch.draw(hearts[2], 10,250);
-				break;
-			case 1: batch.draw(hearts[1], 10,250);
-				break;
-			case 0: batch.draw(hearts[0], 10,250);
-				break;
-			default: batch.draw(hearts[0], 10,250);
-				break;
+	public void damage() {
+		if(!playerControlled) {
+			topHeart().damageHeart();
+			if(topHeart().getHeartHealth() <= 0) {
+				if(!this.hearts.isEmpty()) {
+					this.hearts.remove(topHeart());
+				} 
+			}
+		} else {
+			topHeart(health-1).damageHeart();
+			if(topHeart(health-1).getHeartHealth() <= 0) {
+				health--;
+			}
 		}
 	}
 	
+	private Heart topHeart(int health) {
+		if(health > -1) {
+			return this.hearts.get(health);
+		} else {
+			return this.hearts.get(0);
+		}
+	}
+	
+	private Heart topHeart() {
+		// TODO Auto-generated method stub
+		return this.hearts.get(topHeartIndex());
+
+	}
+	
+	private int topHeartIndex() {
+		// TODO Auto-generated method stub
+		if(!this.hearts.isEmpty()) {
+			return this.hearts.size() - 1;
+		} else {
+			return 0;
+		}
+	}
+
+	public void healthRender(SpriteBatch batch) {
+		int x = 10;
+		int y = 390;
+		for( int i = 0; i < this.hearts.size(); i++) {
+			batch.draw(this.hearts.get(i).getHeartState(),x + i * 10,y);
+		}
+	}
+	
+	public void healthRender(SpriteBatch batch, int x, int y) {
+		if(!this.hearts.isEmpty()) {
+			for( int i = 0; i < this.hearts.size(); i++) {
+				batch.draw(this.hearts.get(i).getHeartState(),x + i * 10,y);
+			}
+		}
+	}
+		
 	public void setLinkoCollider(Rectangle linkoCollider) {
 		this.linkoCollider = linkoCollider;
 	}
@@ -319,12 +353,4 @@ public class Linko {
 	public Sprite getJumpLeft() {
 		return this.jumpLeft;
 	};
-	
-	public void setHealth(int health) {
-		this.health = health;
-	}
-	
-	public int getHealth() {
-		return this.health;
-	}
 }
