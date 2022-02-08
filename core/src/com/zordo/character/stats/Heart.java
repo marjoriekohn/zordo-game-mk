@@ -2,8 +2,9 @@ package com.zordo.character.stats;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.utils.Disposable;
 
-public class Heart {
+public class Heart implements Disposable {
 	String heartsuri = "hearts/";
 	
 	private Sprite heartState;
@@ -37,6 +38,13 @@ public class Heart {
 	
 	public int getHeartHealth() {
 		return this.heartHealth;
+	}
+
+	@Override
+	public void dispose() {
+		// TODO Auto-generated method stub
+		
+		
 	}
 	
 }

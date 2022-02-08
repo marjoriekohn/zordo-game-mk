@@ -9,13 +9,10 @@ import com.zordo.screens.PlayScreen;
 import com.zordo.screens.TitleScreen;
 
 public class LegendOfZordo extends Game {
-	
-	public SpriteBatch batch;
-	
+		
 	@Override
 	public void create () {
 		Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
-		batch = new SpriteBatch();
 		this.setScreen(new TitleScreen(this));
 	}
 
@@ -26,7 +23,7 @@ public class LegendOfZordo extends Game {
 	
 	@Override
 	public void dispose () {
-		batch.dispose();
+		super.dispose();
 	}
 }
 

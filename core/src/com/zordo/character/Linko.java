@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -96,10 +97,10 @@ public class Linko {
 		}
 
 		// setting the animations
-		runningRightAnimation = new Animation<Sprite>(1f/4f, runningRightFrames);
-		runningLeftAnimation = new Animation<Sprite>(1f/4f, runningLeftFrames);
-		walkingRightAnimation = new Animation<Sprite>(1f/4f, walkingRightFrames);
-		walkingLeftAnimation = new Animation<Sprite>(1f/4f, walkingLeftFrames);
+		runningRightAnimation = new Animation<Sprite>(1f/6f, runningRightFrames);
+		runningLeftAnimation = new Animation<Sprite>(1f/6f, runningLeftFrames);
+		walkingRightAnimation = new Animation<Sprite>(1f/3f, walkingRightFrames);
+		walkingLeftAnimation = new Animation<Sprite>(1f/3f, walkingLeftFrames);
 		
 		animation = walkingRightAnimation;
 	}
@@ -229,11 +230,9 @@ public class Linko {
 		}
 	}
 
-	public void healthRender(SpriteBatch batch) {
-		int x = 10;
-		int y = 390;
+	public void healthRender(SpriteBatch batch, OrthographicCamera camera) {
 		for( int i = 0; i < this.hearts.size(); i++) {
-			batch.draw(this.hearts.get(i).getHeartState(),x + i * 10,y);
+			batch.draw(this.hearts.get(i).getHeartState(), (camera.viewportWidth / 2) + i * 10, (camera.viewportHeight / 2 ) - 10);
 		}
 	}
 	

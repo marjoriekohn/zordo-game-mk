@@ -1,11 +1,14 @@
 package com.zordo.screens;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.utils.ScreenUtils;
 import com.zordo.character.Linko;
 import com.zordo.game.LegendOfZordo;
 
@@ -24,6 +27,8 @@ public class PlayScreen implements Screen{
 	
 	public PlayScreen(final LegendOfZordo game) {
 		this.game = game;
+		
+		ScreenUtils.clear(0, 0, 0.2f, 1);
 
 		// setting the background texture
 		background = new TextureRegion();
@@ -50,16 +55,20 @@ public class PlayScreen implements Screen{
 
 	@Override
 	public void render(float delta) {
+		
+    	Gdx.gl20.glClearColor(0, 0, 0.2f, 0.0f);
+    	Gdx.gl20.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		
 		batch = new SpriteBatch();
 		batch.setProjectionMatrix(camera.combined);
 		
 		batch.begin();
-		batch.draw(backgroundTexture,0,0,800,400);
+		batch.draw(backgroundTexture,0,0,1920,1080);
 		
 		linko.move(batch);
 		linko3.move(batch);
 		
-		linko.healthRender(batch);
+		linko.healthRender(batch,camera);
 		
 		if(linko.health <= 0) {
 			BitmapFont font = new BitmapFont();
@@ -76,20 +85,22 @@ public class PlayScreen implements Screen{
 		if(linko2 != null) {
 			linko2.move(batch);
 			
-				
-			
 			if(linko.getLinkoCollider().overlaps(linko2.getLinkoCollider())) {
 				linko2.setLinkoCollider(500,10);
 				linko2.damage();
 				linko.damage();
 			}
 	
-			linko2.healthRender(batch, (int) linko2.getLinkoCollider().x - (int)linko2.getLinkoCollider().width + (linko2.hearts.size() *10), (int) linko2.getLinkoCollider().y + (int) linko2.getLinkoCollider().height + 10);
+			linko2.healthRender(batch, (int) linko2.getLinkoCollider().x - (int)linko2.getLinkoCollider().width, (int) linko2.getLinkoCollider().y + (int) linko2.getLinkoCollider().height + 10);
 			
 			if(linko2.hearts.isEmpty()) {
 				linko2 = null;
 				System.gc();
 			}
+		}
+		
+		if( !(Math.abs(linko.getLinkoCollider().x) < 10)) {
+			camera.position.set(linko.getLinkoCollider().x,linko.getLinkoCollider().y, 10);
 		}
 		
 		batch.end();
@@ -123,6 +134,9 @@ public class PlayScreen implements Screen{
 	@Override
 	public void dispose() {
 		// TODO Auto-generated method stub
+		batch.dispose();
+    	Gdx.gl20.glClearColor(0, 0, 0.2f, 0.0f);
+    	Gdx.gl20.glClear(GL20.GL_COLOR_BUFFER_BIT);
 	}
 
 }

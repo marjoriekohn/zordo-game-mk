@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.utils.ScreenUtils;
 import com.zordo.game.GifDecoder;
 import com.zordo.game.LegendOfZordo;
 
@@ -22,33 +23,39 @@ public class TitleScreen implements Screen {
     
     public TitleScreen(final LegendOfZordo game) {
     	this.game = game;
+    	
+    	animation = GifDecoder.loadGIFAnimation(Animation.PlayMode.LOOP, Gdx.files.internal("lozTitle.gif").read());	
     	camera = new OrthographicCamera();
-    	camera.setToOrtho(false,800,400);
+    	camera.setToOrtho(false, 1920,1080);
     }
 	
 	@Override
 	public void show() {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void render(float delta) {
+		// TODO Auto-generated method stub
+    	Gdx.gl20.glClearColor(0, 0, 0.2f, 0.0f);
+    	Gdx.gl20.glClear(GL20.GL_COLOR_BUFFER_BIT);
+    	
 	    batch = new SpriteBatch();
 	    batch.setProjectionMatrix(camera.combined);
-	    animation = GifDecoder.loadGIFAnimation(Animation.PlayMode.LOOP, Gdx.files.internal("lozTitle.gif").read());		
 
 		// TODO Auto-generated method stub
         elapsed += Gdx.graphics.getDeltaTime();
-        Gdx.gl.glClearColor(1, 0, 0, 0);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
         batch.begin();
         batch.draw(animation.getKeyFrame(elapsed), 0, 0);
         batch.end();
         
         if(Gdx.input.isKeyPressed(Input.Keys.ENTER)) {
+        	ScreenUtils.clear(0, 0, 0.2f, 1);
+        	//this.dispose();
         	this.game.setScreen(new PlayScreen(game));
         }
+        // camera.update();
 	}
 
 	@Override
@@ -72,6 +79,7 @@ public class TitleScreen implements Screen {
 	@Override
 	public void hide() {
 		// TODO Auto-generated method stub
+		//dispose();
 		
 	}
 
