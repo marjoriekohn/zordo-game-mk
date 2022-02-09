@@ -246,7 +246,7 @@ public class Linko {
 		}
 	}
 	
-	/**  Required: Camera, and Platform checked for collision
+	/**  Required: Batch, and Platform checked for collision
 	 *
 	 */
 	public void collisionWithPlatform() {
