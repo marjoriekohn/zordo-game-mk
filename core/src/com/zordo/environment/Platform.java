@@ -1,22 +1,20 @@
 package com.zordo.environment;
 
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 
 public class Platform extends Rectangle {
 
 	private static final long serialVersionUID = 1L;
-
-	private int width;
-	private int height;
+	
+	private Texture platformTexture;
 	
 	public Platform(int width, int height) {
 		super();
 		super.setWidth(width);
 		super.setHeight(height);
-		this.width = width;
-		this.height = height;
+		platformTexture = new Texture("walltexture.png");
 	}
 	
 	public void setCoordinates(int x, int y) {
@@ -32,12 +30,7 @@ public class Platform extends Rectangle {
 		return super.getY();
 	}
 	
-	public void render(ShapeRenderer shapeRenderer) {
-
-		 
-//		 shapeRenderer.begin(ShapeType.Filled);
-//		 shapeRenderer.setColor(0, 0, 0.2f, 1);
-//		 shapeRenderer.rect(this.getX(), this.getY(), this.width, this.height);
-//		 shapeRenderer.end();
+	public void render(SpriteBatch batch) {
+		batch.draw(platformTexture, getX(), getY(),super.getWidth(),super.getHeight());
 	}
 }

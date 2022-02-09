@@ -53,8 +53,8 @@ public class Linko {
 		linkoCollider = new Rectangle();
 		linkoCollider.x = 10;
 		linkoCollider.y = 10;
-		linkoCollider.height = 45;
-		linkoCollider.width = 20;
+		linkoCollider.height = 53;
+		linkoCollider.width = 23;
 
 		health = 8;
 		
@@ -105,11 +105,12 @@ public class Linko {
 		animation = walkingRightAnimation;
 	}
 	
-	public void move(SpriteBatch batch) {
+	public void move(SpriteBatch batch, OrthographicCamera camera) {
 		elapsed += Gdx.graphics.getDeltaTime();
 		stepping = true;
 
 		if(playerControlled) {
+			healthRender(batch,camera);
 			if(!Gdx.input.isKeyPressed(Input.Keys.LEFT) && !Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
 				stepping = false;
 				if(this.getFlippedRight() && !this.getJumping()) {
@@ -173,6 +174,7 @@ public class Linko {
 				this.setJumping(false);
 			}
 		} else {
+			healthRender(batch, (int) getLinkoCollider().x - (int)getLinkoCollider().width, (int) getLinkoCollider().y + (int) getLinkoCollider().height + 10);
 			if(!this.getJumping()){
 				animation = this.getRunningLeftAnimation();
 			}
@@ -230,19 +232,33 @@ public class Linko {
 		}
 	}
 
-	public void healthRender(SpriteBatch batch, OrthographicCamera camera) {
+	private void healthRender(SpriteBatch batch, OrthographicCamera camera) {
 		for( int i = 0; i < this.hearts.size(); i++) {
 			batch.draw(this.hearts.get(i).getHeartState(), (camera.viewportWidth / 2) + i * 10, (camera.viewportHeight / 2 ) - 10);
 		}
 	}
 	
-	public void healthRender(SpriteBatch batch, int x, int y) {
+	private void healthRender(SpriteBatch batch, int x, int y) {
 		if(!this.hearts.isEmpty()) {
 			for( int i = 0; i < this.hearts.size(); i++) {
 				batch.draw(this.hearts.get(i).getHeartState(),x + i * 10,y);
 			}
 		}
 	}
+	
+	/**  Required: Camera, and Platform checked for collision
+	 *
+	 */
+	public void collisionWithPlatform() {
+		//collide from right side
+		
+		//collide from left side
+		
+		//collide from bottom
+		
+		//collide from top
+		
+	};
 		
 	public void setLinkoCollider(Rectangle linkoCollider) {
 		this.linkoCollider = linkoCollider;
@@ -351,5 +367,6 @@ public class Linko {
 	
 	public Sprite getJumpLeft() {
 		return this.jumpLeft;
-	};
+	}
+
 }

@@ -26,14 +26,12 @@ public class PlayScreen implements Screen{
 	final LegendOfZordo game;
 	Linko linko;
 	Linko linko2;
-	Linko linko3;
 	
 	private Platform boundaryleft;
 	private Platform boundaryright;
 	private Platform boundarybottom;
 	private Platform boundarytop;
 	
-	private ShapeRenderer shapeRenderer;
 	
 	public PlayScreen(final LegendOfZordo game) {
 		this.game = game;
@@ -42,7 +40,9 @@ public class PlayScreen implements Screen{
 		this.boundaryleft = new Platform(10,1080);
 		this.boundaryleft.setCoordinates(0,0);
 		this.boundaryright = new Platform(10,1080);
-		this.boundaryright.setCoordinates(780,0);
+		this.boundaryright.setCoordinates(790,0);
+		this.boundarytop = new Platform(800,10);
+		this.boundarytop.setCoordinates(0,390);
 		
 		ScreenUtils.clear(0, 0, 0.2f, 1);
 
@@ -57,10 +57,8 @@ public class PlayScreen implements Screen{
 		
 		linko = new Linko(true);
 		linko2 = new Linko(false);
-		linko3 = new Linko(false);
 	
 		linko2.setLinkoCollider(400, 10);
-		linko3.setLinkoCollider(400,100);
 	}
 	
 	@Override
@@ -75,53 +73,44 @@ public class PlayScreen implements Screen{
     	Gdx.gl20.glClearColor(0, 0, 0.2f, 0.0f);
     	Gdx.gl20.glClear(GL20.GL_COLOR_BUFFER_BIT);
     	
-		shapeRenderer = new ShapeRenderer();
-		shapeRenderer.setProjectionMatrix(camera.combined);
 		batch = new SpriteBatch();
 		batch.setProjectionMatrix(camera.combined);
 		
 		batch.begin();
-		shapeRenderer.begin(ShapeType.Filled);
 		batch.draw(backgroundTexture,0,0,1920,1080);
 		
-		//this.boundaryleft.render(shapeRenderer);
-		//this.boundaryright.render(shapeRenderer);
+		boundaryleft.render(batch);
+		boundaryright.render(batch);
+		boundarytop.render(batch);
 		
-		linko.move(batch);
-		linko3.move(batch);
-				
-		linko.healthRender(batch,camera);
+		// mostly every screen
+		linko.move(batch,camera);
 		
+		// every screen
+		linko.collisionWithPlatform();
 		if(linko.getLinkoCollider().overlaps(this.boundaryleft)) {
 			linko.setLinkoCollider(this.boundaryleft.getX() + 10, linko.getLinkoCollider().y);
 		}
 		
 		if(linko.getLinkoCollider().overlaps(this.boundaryright)) {
-			linko.setLinkoCollider(this.boundaryright.getX() - 20, linko.getLinkoCollider().y);
+			linko.setLinkoCollider(this.boundaryright.getX() - 25, linko.getLinkoCollider().y);
 		}
 		
+		// every screen
 		if(linko.health <= 0) {
 			BitmapFont font = new BitmapFont();
 			font.draw(batch, "GAME OVER", 400, 200);
 		}
 
 		
-		if(linko.getLinkoCollider().overlaps(linko3.getLinkoCollider())) {
-			linko3.setLinkoCollider(500, 100);
-			linko3.damage();
-			linko.damage();
-		}
-		
 		if(linko2 != null) {
-			linko2.move(batch);
+			linko2.move(batch,camera);
 			
 			if(linko.getLinkoCollider().overlaps(linko2.getLinkoCollider())) {
 				linko2.setLinkoCollider(500,10);
 				linko2.damage();
 				linko.damage();
 			}
-	
-			linko2.healthRender(batch, (int) linko2.getLinkoCollider().x - (int)linko2.getLinkoCollider().width, (int) linko2.getLinkoCollider().y + (int) linko2.getLinkoCollider().height + 10);
 			
 			if(linko2.hearts.isEmpty()) {
 				linko2 = null;
@@ -130,14 +119,7 @@ public class PlayScreen implements Screen{
 		}
 		
 		batch.end();
-		camera.update();
-		
-		shapeRenderer.setColor(1, 1, 0, 1);
-		shapeRenderer.line(50, 0, 10, 100);
-		shapeRenderer.rect(10, 0, 5, 10);
-		shapeRenderer.end();
-		camera.update();
-		
+		camera.update();		
 	}
 
 	@Override
@@ -168,7 +150,6 @@ public class PlayScreen implements Screen{
 	public void dispose() {
 		// TODO Auto-generated method stub
 		batch.dispose();
-		shapeRenderer.dispose();
 	}
 
 }
