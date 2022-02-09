@@ -8,8 +8,11 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.zordo.character.Linko;
+import com.zordo.environment.Platform;
 import com.zordo.game.LegendOfZordo;
 
 public class PlayScreen implements Screen{
@@ -25,8 +28,21 @@ public class PlayScreen implements Screen{
 	Linko linko2;
 	Linko linko3;
 	
+	private Platform boundaryleft;
+	private Platform boundaryright;
+	private Platform boundarybottom;
+	private Platform boundarytop;
+	
+	private ShapeRenderer shapeRenderer;
+	
 	public PlayScreen(final LegendOfZordo game) {
 		this.game = game;
+
+		
+		this.boundaryleft = new Platform(10,1080);
+		this.boundaryleft.setCoordinates(0,0);
+		this.boundaryright = new Platform(10,1080);
+		this.boundaryright.setCoordinates(780,0);
 		
 		ScreenUtils.clear(0, 0, 0.2f, 1);
 
@@ -58,17 +74,31 @@ public class PlayScreen implements Screen{
 		
     	Gdx.gl20.glClearColor(0, 0, 0.2f, 0.0f);
     	Gdx.gl20.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		
+    	
+		shapeRenderer = new ShapeRenderer();
+		shapeRenderer.setProjectionMatrix(camera.combined);
 		batch = new SpriteBatch();
 		batch.setProjectionMatrix(camera.combined);
 		
 		batch.begin();
+		shapeRenderer.begin(ShapeType.Filled);
 		batch.draw(backgroundTexture,0,0,1920,1080);
+		
+		//this.boundaryleft.render(shapeRenderer);
+		//this.boundaryright.render(shapeRenderer);
 		
 		linko.move(batch);
 		linko3.move(batch);
-		
+				
 		linko.healthRender(batch,camera);
+		
+		if(linko.getLinkoCollider().overlaps(this.boundaryleft)) {
+			linko.setLinkoCollider(this.boundaryleft.getX() + 10, linko.getLinkoCollider().y);
+		}
+		
+		if(linko.getLinkoCollider().overlaps(this.boundaryright)) {
+			linko.setLinkoCollider(this.boundaryright.getX() - 20, linko.getLinkoCollider().y);
+		}
 		
 		if(linko.health <= 0) {
 			BitmapFont font = new BitmapFont();
@@ -99,12 +129,15 @@ public class PlayScreen implements Screen{
 			}
 		}
 		
-		if( !(Math.abs(linko.getLinkoCollider().x) < 10)) {
-			camera.position.set(linko.getLinkoCollider().x,linko.getLinkoCollider().y, 10);
-		}
-		
 		batch.end();
 		camera.update();
+		
+		shapeRenderer.setColor(1, 1, 0, 1);
+		shapeRenderer.line(50, 0, 10, 100);
+		shapeRenderer.rect(10, 0, 5, 10);
+		shapeRenderer.end();
+		camera.update();
+		
 	}
 
 	@Override
@@ -135,8 +168,7 @@ public class PlayScreen implements Screen{
 	public void dispose() {
 		// TODO Auto-generated method stub
 		batch.dispose();
-    	Gdx.gl20.glClearColor(0, 0, 0.2f, 0.0f);
-    	Gdx.gl20.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		shapeRenderer.dispose();
 	}
 
 }
