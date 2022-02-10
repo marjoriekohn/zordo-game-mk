@@ -37,11 +37,11 @@ public class PlayScreen implements Screen{
 		this.game = game;
 
 		
-		this.boundaryleft = new Platform(10,1080);
-		this.boundaryleft.setCoordinates(0,0);
-		this.boundaryright = new Platform(10,1080);
-		this.boundaryright.setCoordinates(790,0);
-		this.boundarytop = new Platform(800,10);
+		this.boundaryleft = new Platform();
+		this.boundaryleft.setCoordinates(0,10);
+		this.boundaryright = new Platform();
+		this.boundaryright.setCoordinates(790,10);
+		this.boundarytop = new Platform();
 		this.boundarytop.setCoordinates(0,390);
 		
 		ScreenUtils.clear(0, 0, 0.2f, 1);

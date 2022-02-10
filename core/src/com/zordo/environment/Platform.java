@@ -9,12 +9,12 @@ public class Platform extends Rectangle {
 	private static final long serialVersionUID = 1L;
 	
 	private Texture platformTexture;
-	
-	public Platform(int width, int height) {
+
+	public Platform() {
 		super();
-		super.setWidth(width);
-		super.setHeight(height);
-		platformTexture = new Texture("walltexture.png");
+		super.setWidth(10);
+		super.setHeight(10);
+		platformTexture = new Texture("environment-textures/platform-square.png");
 	}
 	
 	public void setCoordinates(int x, int y) {
