@@ -12,7 +12,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.zordo.character.stats.Heart;
 
-public class Linko {
+public class Linkso {
 	Rectangle linkoCollider;
 	Boolean flippedRight;
 	Boolean jumping;
