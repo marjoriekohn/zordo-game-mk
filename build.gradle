@@ -15,7 +15,7 @@ plugins {
 }
 
 tasks.register('installLocalGitHook', Copy) {
-    from new File(rootProject.rootDir, '_scripts/pre-commit')
+    from new File(rootProject.rootDir, '_scripts/pre-commit.sh')
     into { new File(rootProject.rootDir, '.git/hooks') }
     fileMode 0775
 }
