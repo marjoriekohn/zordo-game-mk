@@ -13,7 +13,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.zordo.character.stats.Heart;
 
 public class Linko {
-	Rectangle linkoCollider;
+	Rectangle linkoCollisder;
 	Boolean flippedRight;
 	Boolean jumping;
 	Boolean playerControlled;
