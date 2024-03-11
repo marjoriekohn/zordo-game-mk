@@ -8,7 +8,7 @@ gradle build && gradle lint
 status=$?
 
 if [[ -n "${stash_commit}" ]]
-then gradle build && gradle lint && git stash apply "${stash_commit}"
+then git stash apply "${stash_commit}"
 fi
 
 exit $status
