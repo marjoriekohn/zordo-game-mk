@@ -1,6 +1,7 @@
 #!/bin/sh
 
 ./gradlew build
+./gradlew lint
 
 status=$?
 

@@ -12,8 +12,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.zordo.character.stats.Heart;
 
-public class Linkso {
-	Rectangle linkoCollider;
+public class Linko {
+	Rectangle linksoCollider;
 	Boolean flippedRight;
 	Boolean jumping;
 	Boolean playerControlled;
