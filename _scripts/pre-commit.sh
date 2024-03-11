@@ -4,8 +4,8 @@
 stash_commit="$(git stash create)"
 git reset —-hard
 
-./gradlew build
-./gradlew lint
+gradle build
+gradle lint
 
 status=$?
 
