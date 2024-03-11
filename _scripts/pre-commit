@@ -3,6 +3,8 @@
 
 stash_commit="$(git stash create)"
 
+gradle build && gradle lint
+
 status=$?
 
 if [[ -n "${stash_commit}" ]]
