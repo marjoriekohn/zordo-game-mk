@@ -8,7 +8,7 @@ public class Platform extends Rectangle {
 
 	private static final long serialVersionUID = 1L;
 	
-	private Texture platformTexture;
+	private final Texture platformTexture;
 
 	public Platform() {
 		super();

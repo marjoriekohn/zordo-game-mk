@@ -1,10 +1,12 @@
 apply plugin: "java"
 
-jar.archiveBaseName = "The Legend of Zordo"
-[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+project.ext.mainClassName = "com.zordo.game.desktop.DesktopLauncher"
+project.ext.assetsDir = new File("../core/assets");
 
+jar.archiveBaseName = "The Legend of Zordo - Core"
 sourceSets.main.java.srcDirs = [ "src/" ]
 
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
 eclipse.project {
     name = appName + "-core"
